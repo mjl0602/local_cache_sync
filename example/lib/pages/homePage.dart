@@ -31,9 +31,8 @@ class _HomePageState extends State<HomePage> {
                 RaisedButton(
                   child: Text('Add'),
                   onPressed: () {
-                    var code = DateTime.now().millisecond.toString();
-                    var device = Device(code, name: '测试:$code', uuid: 'test');
-                    device.save();
+                    var list = Device.all();
+                    print(list);
                   },
                 ),
               ],

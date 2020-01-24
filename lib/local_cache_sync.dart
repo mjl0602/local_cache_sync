@@ -36,8 +36,7 @@ class LocalCacheSync {
 class LocalCacheLoader {
   final String channel;
 
-  Uri get directoryPath =>
-      LocalCacheSync().cachePath.resolve(channel).resolve('/');
+  Uri get directoryPath => LocalCacheSync().cachePath.resolve('$channel/');
   Directory get directory {
     var d = Directory.fromUri(directoryPath);
     if (!d.existsSync()) {
@@ -51,9 +50,12 @@ class LocalCacheLoader {
     List<LocalCacheObject> targetList = [];
     for (var file in list) {
       if (file is File) {
-        // TODO: 获取文件名
-        targetList.add(LocalCacheObject(
-            file.path.replaceAll(RegExp('(.*\/)*([^.]+).*'), ''), channel));
+        // TODO: 获取文件名]
+        // var fileName = RegExp('(.*\/)*([^.]+).*').allMatches(file.path);
+        // var fileName = file.path.matchAsPrefix(x)
+        targetList.add(
+          LocalCacheObject('TODO:', channel),
+        );
       }
     }
     return targetList;
@@ -75,7 +77,7 @@ class LocalCacheObject {
       [this.channel = r'_$DefaultChannel', Map<String, dynamic> value])
       : this._value = value;
 
-  Uri get path => LocalCacheSync().cachePath.resolve(channel).resolve('/');
+  Uri get path => LocalCacheSync().cachePath.resolve('$channel/');
   File get file => File.fromUri(path.resolve('$id.json'));
 
   bool get isCahce => _value != null;

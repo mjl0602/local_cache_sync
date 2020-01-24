@@ -29,6 +29,7 @@ dev_dependencies:
     sdk: flutter
   local_cache_sync:
     path: ../
+  path_provider: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
