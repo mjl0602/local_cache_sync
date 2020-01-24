@@ -46,17 +46,18 @@ class LocalCacheLoader {
     return d;
   }
 
-  // List<LocalCacheObject> get all {
-  //   List<FileSystemEntity> list = directory.listSync();
-  //   List<LocalCacheObject> targetList = [];
-  //   for (var file in list) {
-  //     if (file is File) {
-  //       // TODO: 获取文件名
-  //       targetList.add(LocalCacheObject(file.path, channel));
-  //     }
-  //   }
-  //   return targetList;
-  // }
+  List<LocalCacheObject> get all {
+    List<FileSystemEntity> list = directory.listSync();
+    List<LocalCacheObject> targetList = [];
+    for (var file in list) {
+      if (file is File) {
+        // TODO: 获取文件名
+        targetList.add(LocalCacheObject(
+            file.path.replaceAll(RegExp('(.*\/)*([^.]+).*'), ''), channel));
+      }
+    }
+    return targetList;
+  }
   // TODO: 清除全部
   // TODO: 获取文件大小
 
