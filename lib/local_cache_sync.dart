@@ -54,7 +54,7 @@ class LocalCacheLoader {
         // var fileName = RegExp('(.*\/)*([^.]+).*').allMatches(file.path);
         // var fileName = file.path.matchAsPrefix(x)
         targetList.add(
-          LocalCacheObject('TODO:', channel),
+          LocalCacheObject(file.path.split('/').last.split('.').first, channel),
         );
       }
     }
