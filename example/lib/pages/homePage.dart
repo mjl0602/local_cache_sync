@@ -7,38 +7,46 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Device> list = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Demo'),
-      ),
-      body: ListView(
-        children: <Widget>[
+        actions: <Widget>[
           Container(
-            height: 80,
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: <Widget>[
-                RaisedButton(
-                  child: Text('Add'),
-                  onPressed: () {
-                    var code = DateTime.now().millisecond.toString();
-                    var device = Device(code, name: '测试:$code', uuid: 'test');
-                    device.save();
-                  },
-                ),
-                RaisedButton(
-                  child: Text('Add'),
-                  onPressed: () {
-                    var list = Device.all();
-                    print(list);
-                  },
-                ),
-              ],
+            padding: EdgeInsets.symmetric(horizontal: 6),
+            child: RaisedButton(
+              child: Text('Add'),
+              onPressed: () {
+                var code = DateTime.now().millisecond.toString();
+                var device = Device(uuid: code, name: '测试:$code', type: 1);
+                device.save();
+                list = Device.all();
+                print(list);
+                setState(() {});
+              },
             ),
-          )
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 6),
+            child: RaisedButton(
+              child: Text('Read All'),
+              onPressed: () {
+                list = Device.all();
+                print(list);
+                setState(() {});
+              },
+            ),
+          ),
         ],
+      ),
+      body: ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (ctx, index) => Container(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Text(list[index].uuid),
+        ),
       ),
     );
   }

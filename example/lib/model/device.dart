@@ -1,24 +1,44 @@
 import 'package:local_cache_sync/local_cache_sync.dart';
 
-class Device extends LocalCacheObject {
-  Device.formMap(String id, Map value) : super(id, 'device', value);
+class Device {
+  final String uuid;
+  final String name;
+  final int type;
+
+  Device({
+    this.uuid,
+    this.name,
+    this.type,
+  });
+
+  Device.formJson(Map<String, dynamic> map)
+      : this(
+          uuid: map['uuid'],
+          name: map['name'],
+          type: map['type'],
+        );
+
+  static LocalCacheLoader get _loader => LocalCacheLoader('device');
 
   static List<Device> all() {
-    return LocalCacheLoader('device')
-        .all
+    return _loader.all
         .map<Device>(
-          (cache) => Device.formMap(cache.id, cache.value),
+          (cache) => Device(
+            uuid: cache.id,
+            name: cache.value['name'],
+            type: cache.value['type'],
+          ),
         )
         .toList();
   }
 
-  Device(String id, {String name, String uuid})
-      : super(
-          id,
-          'device',
-          {'name': name, 'uuid': uuid},
-        );
+  LocalCacheObject save() {
+    return Device._loader.saveById(uuid, jsonMap);
+  }
 
-  String get name => value['name'];
-  String get uuid => value['uuid'];
+  Map<String, dynamic> get jsonMap => {
+        'uuid': uuid,
+        'name': name,
+        'type': type,
+      };
 }

@@ -50,9 +50,6 @@ class LocalCacheLoader {
     List<LocalCacheObject> targetList = [];
     for (var file in list) {
       if (file is File) {
-        // TODO: 获取文件名]
-        // var fileName = RegExp('(.*\/)*([^.]+).*').allMatches(file.path);
-        // var fileName = file.path.matchAsPrefix(x)
         targetList.add(
           LocalCacheObject(file.path.split('/').last.split('.').first, channel),
         );
@@ -60,19 +57,27 @@ class LocalCacheLoader {
     }
     return targetList;
   }
+
+  LocalCacheObject getById(String id) {
+    return LocalCacheObject(id, channel);
+  }
+
+  LocalCacheObject saveById(String id, Map<String, dynamic> value) {
+    return LocalCacheObject(id, channel, value)..save();
+  }
+
+  LocalCacheObject deleteById(String id) {
+    return LocalCacheObject(id, channel)..delete();
+  }
   // TODO: 清除全部
   // TODO: 获取文件大小
 
   LocalCacheLoader(this.channel);
-
-  LocalCacheObject create(String id, Map<String, dynamic> map) {
-    return LocalCacheObject(id, channel, map);
-  }
 }
 
 class LocalCacheObject {
   final String id;
-  final String channel;
+  String channel;
   LocalCacheObject(this.id,
       [this.channel = r'_$DefaultChannel', Map<String, dynamic> value])
       : this._value = value;
@@ -80,7 +85,7 @@ class LocalCacheObject {
   Uri get path => LocalCacheSync().cachePath.resolve('$channel/');
   File get file => File.fromUri(path.resolve('$id.json'));
 
-  bool get isCahce => _value != null;
+  bool get isCache => _value != null;
 
   Map<String, dynamic> _value;
 
