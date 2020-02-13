@@ -1,5 +1,7 @@
 library local_cache_sync;
 
+export './cacheViewTablePage.dart';
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -69,8 +71,16 @@ class LocalCacheLoader {
   LocalCacheObject deleteById(String id) {
     return LocalCacheObject(id, channel)..delete();
   }
-  // TODO: 清除全部
+
+  // 清除全部
+  void clearAll() {
+    directory.deleteSync(recursive: true);
+  }
+
   // TODO: 获取文件大小
+  // void length() {
+  //   directory;
+  // }
 
   LocalCacheLoader(this.channel);
 }
@@ -119,6 +129,7 @@ class LocalCacheObject {
   }
 
   delete() {
+    _value = null;
     file.deleteSync();
   }
 }

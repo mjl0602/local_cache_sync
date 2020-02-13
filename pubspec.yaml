@@ -1,8 +1,7 @@
 name: local_cache_sync
 description: Cache json map to local file with Dart:io. Read cahce with sync api.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/mjl0602
-
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -20,7 +19,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # flutter packages pub publish --server=https://pub.dartlang.org
   # To add assets to your package, add an assets section, like this:
   # assets:
@@ -32,7 +30,6 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # To add custom fonts to your package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
