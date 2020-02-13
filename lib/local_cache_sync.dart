@@ -103,6 +103,9 @@ class LocalCacheObject {
   }
 
   Map<String, dynamic> read() {
+    if (!file.existsSync()) {
+      return null;
+    }
     var content = file.readAsStringSync();
     return json.decode(content);
   }

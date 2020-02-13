@@ -1,5 +1,6 @@
 import 'package:example/model/device.dart';
 import 'package:flutter/material.dart';
+import 'package:local_cache_sync/local_cache_sync.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,9 +17,18 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           Container(
             padding: EdgeInsets.symmetric(horizontal: 6),
-            child: RaisedButton(
-              child: Text('Add'),
-              onPressed: () {
+            child: GestureDetector(
+              child: Container(
+                color: Colors.black.withOpacity(0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
+                child: Center(
+                  child: Text('Add'),
+                ),
+              ),
+              onTap: () {
                 var code = DateTime.now().millisecond.toString();
                 var device = Device(uuid: code, name: '测试:$code', type: 1);
                 device.save();
@@ -30,12 +40,23 @@ class _HomePageState extends State<HomePage> {
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 6),
-            child: RaisedButton(
-              child: Text('Read All'),
-              onPressed: () {
-                list = Device.all();
-                print(list);
-                setState(() {});
+            child: GestureDetector(
+              child: Container(
+                color: Colors.black.withOpacity(0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
+                child: Center(
+                  child: Text('Manage'),
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => CacheViewTablePage('device'),
+                  ),
+                );
               },
             ),
           ),
