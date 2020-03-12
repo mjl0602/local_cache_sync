@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:local_cache_sync/local_cache_sync.dart';
-
 void main() {
   test('adds one to input values', () {
     // final calculator = Calculator();

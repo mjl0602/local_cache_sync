@@ -1,3 +1,7 @@
+## [1.1.0] Release
+
+* Add UserDefaultSync class.
+
 ## [1.0.0] Release
 
 * Release

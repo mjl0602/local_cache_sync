@@ -5,6 +5,7 @@ export './cacheViewTablePage.dart';
 import 'dart:convert';
 import 'dart:io';
 
+/// LocalCacheSync单例，用于储存缓存路径，并暴露常用接口
 class LocalCacheSync {
   // 工厂模式
   factory LocalCacheSync() => _getInstance();
@@ -31,14 +32,42 @@ class LocalCacheSync {
     return Uri.parse(_cachePath);
   }
 
-  LocalCacheLoader loaderOfChannel(String channel) => LocalCacheLoader(channel);
-  LocalCacheLoader userDefault() => LocalCacheLoader(r'_$LocalCacheDefault');
+  static LocalCacheLoader loaderOfChannel(String channel) =>
+      LocalCacheLoader(channel);
+  static UserDefaultSync get userDefault => UserDefaultSync();
 }
 
+/// 用于储存用户缓存数据，继承自LocalCacheLoader，实现了自己的读写方法，并增加了类型判断
+class UserDefaultSync extends LocalCacheLoader {
+  UserDefaultSync() : super(r'_$LocalCacheDefault');
+
+  dynamic operator [](String key) => getWithKey(key);
+
+  void operator []=(String key, dynamic value) => setWithKey(key, value);
+
+  /// 使用Key保存一个值
+  LocalCacheObject setWithKey<T>(String k, T v) {
+    return LocalCacheObject(k, channel, {'v': v})..save();
+  }
+
+  /// 使用Key获取一个值
+  T getWithKey<T>(String k) {
+    var map = LocalCacheObject(k, channel).value;
+    if (map?.isEmpty != false) {
+      return null;
+    }
+    return map['v'] is T ? map['v'] : null;
+  }
+}
+
+/// 用于读取特定Channel的loader类，实现了增删查改方法
 class LocalCacheLoader {
   final String channel;
 
+  LocalCacheLoader(this.channel);
+
   Uri get directoryPath => LocalCacheSync().cachePath.resolve('$channel/');
+
   Directory get directory {
     var d = Directory.fromUri(directoryPath);
     if (!d.existsSync()) {
@@ -76,13 +105,6 @@ class LocalCacheLoader {
   void clearAll() {
     directory.deleteSync(recursive: true);
   }
-
-  // TODO: 获取文件大小
-  // void length() {
-  //   directory;
-  // }
-
-  LocalCacheLoader(this.channel);
 }
 
 class LocalCacheObject {

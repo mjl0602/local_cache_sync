@@ -8,7 +8,80 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Device> list = [];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('local_cache_sync'),
+      ),
+      body: Container(
+        padding: EdgeInsets.only(top: 20),
+        child: Column(
+          children: <Widget>[
+            Center(
+              child: MaterialButton(
+                color: Colors.orange,
+                textColor: Colors.white,
+                child: Text('List Demo(Device Manage)'),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => ListDemoPage(),
+                  ));
+                },
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 40),
+              child: Text("Simple Userdefault Demo:"),
+            ),
+            // 你可以使用[]操作符或者getWithKey方法
+            Switch(
+              value: LocalCacheSync.userDefault['switch-A'] == true,
+              onChanged: (v) {
+                setState(() {
+                  LocalCacheSync.userDefault['switch-A'] = v;
+                });
+              },
+            ),
+            // []与getWithKey是等效的
+            Switch(
+              value: LocalCacheSync.userDefault.getWithKey<bool>('switch-A'),
+              onChanged: (v) {
+                setState(() {
+                  LocalCacheSync.userDefault.setWithKey<bool>('switch-A', v);
+                });
+              },
+            ),
+            Switch(
+              value: LocalCacheSync.userDefault['switch-B'] == true,
+              onChanged: (v) {
+                setState(() {
+                  LocalCacheSync.userDefault['switch-B'] = v;
+                });
+              },
+            ),
+            Switch(
+              value: LocalCacheSync.userDefault['switch-C'] == true,
+              onChanged: (v) {
+                setState(() {
+                  LocalCacheSync.userDefault['switch-C'] = v;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ListDemoPage extends StatefulWidget {
+  @override
+  _ListDemoPageState createState() => _ListDemoPageState();
+}
+
+class _ListDemoPageState extends State<ListDemoPage> {
+  List<Device> list = Device.all();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
