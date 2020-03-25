@@ -1,3 +1,7 @@
+## [1.1.1] Release
+
+* Fix bug.
+
 ## [1.1.0] Release
 
 * Add UserDefaultSync class.

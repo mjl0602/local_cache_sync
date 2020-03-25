@@ -109,13 +109,16 @@ class LocalCacheLoader {
 
 class LocalCacheObject {
   final String id;
+
+  String get realId => id.replaceAll(RegExp('[\\\\/:.]'), '_');
+
   String channel;
   LocalCacheObject(this.id,
       [this.channel = r'_$DefaultChannel', Map<String, dynamic> value])
       : this._value = value;
 
   Uri get path => LocalCacheSync().cachePath.resolve('$channel/');
-  File get file => File.fromUri(path.resolve('$id.json'));
+  File get file => File.fromUri(path.resolve('$realId.json'));
 
   bool get isCache => _value != null;
 
