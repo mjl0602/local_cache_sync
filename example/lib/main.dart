@@ -4,6 +4,11 @@ import 'package:local_cache_sync/local_cache_sync.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  LocalCacheSync.instance.setCachePath(
+    await getTemporaryDirectory(),
+    'example_app/',
+  );
   runApp(MyApp());
 }
 
@@ -16,9 +21,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    getTemporaryDirectory().then((uri) {
-      LocalCacheSync.instance.setCachePath(uri.path);
-    });
     super.initState();
   }
 

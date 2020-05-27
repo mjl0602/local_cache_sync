@@ -30,6 +30,18 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            Center(
+              child: MaterialButton(
+                color: Colors.orange,
+                textColor: Colors.white,
+                child: Text('View All Channel'),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => CacheChannelListPage(),
+                  ));
+                },
+              ),
+            ),
             Container(
               padding: EdgeInsets.only(top: 40),
               child: Text("Simple Userdefault Demo:"),
@@ -45,7 +57,8 @@ class _HomePageState extends State<HomePage> {
             ),
             // []与getWithKey是等效的
             Switch(
-              value: LocalCacheSync.userDefault.getWithKey<bool>('switch-A'),
+              value: LocalCacheSync.userDefault.getWithKey<bool>('switch-A') ??
+                  false,
               onChanged: (v) {
                 setState(() {
                   LocalCacheSync.userDefault.setWithKey<bool>('switch-A', v);

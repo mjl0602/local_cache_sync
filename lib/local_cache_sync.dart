@@ -1,7 +1,7 @@
 library local_cache_sync;
 
 export './cacheViewTablePage.dart';
-
+export './cacheChannelListPage.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -24,12 +24,13 @@ class LocalCacheSync {
   void Function(LocalCacheObject) willLoadValue;
   void Function(Map<String, dynamic>, LocalCacheObject) didLoadValue;
 
-  String _cachePath;
-  void setCachePath(String path) => _cachePath = path;
+  Uri _cachePath;
+  void setCachePath(Directory rootPath, [String cacheName = '']) =>
+      _cachePath = rootPath.uri.resolve(cacheName);
 
   Uri get cachePath {
     assert(_cachePath != null, 'Cache path must not be null. 缓存路径不可设置为空。');
-    return Uri.parse(_cachePath);
+    return _cachePath;
   }
 
   static LocalCacheLoader loaderOfChannel(String channel) =>
