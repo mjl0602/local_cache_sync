@@ -14,6 +14,20 @@ pubspec.yaml
 
 Set Cache Path.
 
+After 1.2.0:
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  LocalCacheSync.instance.setCachePath(
+    await getTemporaryDirectory(),
+    'example_app/',
+  );
+  runApp(MyApp());
+}
+```
+
+Before(less than or equal to 1.1.1):
 ```dart
 getTemporaryDirectory().then((uri) {
       LocalCacheSync.instance.setCachePath(uri.path);

@@ -1,3 +1,8 @@
+## [1.2.0] Breaking change!
+
+* Add golbal cache name.
+* Add CacheChannelListPage widget.
+
 ## [1.1.1] Release
 
 * Fix bug.
