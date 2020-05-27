@@ -83,6 +83,22 @@ String res = LocalCacheSync.userDefault['token'];
 Map res = LocalCacheSync.userDefault['x-config'];
 ```
 
+## DefaultValueCache
+Eazy used with static property.
+
+```dart
+// Creat class:
+class ProjectCustomUserDefault {
+  static var autoLogin = const DefaultValueCache<bool>('autoLogin', false);
+}
+
+// save
+ProjectCustomUserDefault.autoLogin.value = true;
+// read
+bool isAutoLogin = ProjectCustomUserDefault.autoLogin.value
+```
+
+
 ## Usage: Table Cache 列表管理
 
 如果你需要管理一系列值，请使用`LocalCacheLoader`，只需要一个`channel`标志，你就可以管理一系列值。    

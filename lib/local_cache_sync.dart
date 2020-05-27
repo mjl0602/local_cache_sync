@@ -38,6 +38,20 @@ class LocalCacheSync {
   static UserDefaultSync get userDefault => UserDefaultSync();
 }
 
+/// 封装了一个简单的读写方法，在不存在值时返回默认值
+class DefaultValueCache<T> {
+  final String key;
+  final T defaultValue;
+
+  const DefaultValueCache(this.key, [this.defaultValue]);
+
+  T get value => LocalCacheSync.userDefault[key] ?? defaultValue;
+
+  set value(T value) {
+    LocalCacheSync.userDefault[key] = value;
+  }
+}
+
 /// 用于储存用户缓存数据，继承自LocalCacheLoader，实现了自己的读写方法，并增加了类型判断
 class UserDefaultSync extends LocalCacheLoader {
   UserDefaultSync() : super(r'_$LocalCacheDefault');

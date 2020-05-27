@@ -1,7 +1,9 @@
 ## [1.2.0] Breaking change!
 
+* If you update to 1.2.0. You cannot read old data with same code!
 * Add golbal cache name.
 * Add CacheChannelListPage widget.
+* Add DefaultValueCache.
 
 ## [1.1.1] Release
 
