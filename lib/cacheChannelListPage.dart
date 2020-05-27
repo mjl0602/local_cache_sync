@@ -16,9 +16,7 @@ class _CacheChannelListPageState extends State<CacheChannelListPage> {
     var res = LocalCacheSync.instance.cachePath;
     var channelList = Directory.fromUri(res).listSync();
     for (var channel in channelList) {
-      var name = channel.path.split('/').last;
-      list.add(name);
-      print(name);
+      list.add(channel.path);
     }
     super.initState();
   }
@@ -34,7 +32,7 @@ class _CacheChannelListPageState extends State<CacheChannelListPage> {
       body: ListView.builder(
         itemCount: list.length,
         itemBuilder: (ctx, index) => _Row(
-          channel: list[index],
+          fullChannelPath: list[index],
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (ctx) => CacheViewTablePage(list[index]),
@@ -47,12 +45,14 @@ class _CacheChannelListPageState extends State<CacheChannelListPage> {
 }
 
 class _Row extends StatelessWidget {
-  final String channel;
+  final String fullChannelPath;
   final Function onTap;
+
+  String get name => fullChannelPath.split('/').last;
 
   const _Row({
     Key key,
-    this.channel,
+    this.fullChannelPath,
     this.onTap,
   }) : super(key: key);
   @override
@@ -62,8 +62,21 @@ class _Row extends StatelessWidget {
       child: Container(
         color: Colors.white,
         margin: EdgeInsets.only(bottom: 1),
-        padding: EdgeInsets.all(24),
-        child: Text(channel),
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(name),
+            Container(height: 6),
+            Text(
+              fullChannelPath,
+              style: TextStyle(
+                fontSize: 12,
+                color: Color(0xff9b9b9b),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
