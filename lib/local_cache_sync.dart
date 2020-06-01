@@ -2,8 +2,11 @@ library local_cache_sync;
 
 export './cacheViewTablePage.dart';
 export './cacheChannelListPage.dart';
+export './cacheImageTablePage.dart';
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:local_cache_sync/image_cache/local_cache_image.dart';
 
 /// LocalCacheSync单例，用于储存缓存路径，并暴露常用接口
 class LocalCacheSync {
@@ -21,7 +24,10 @@ class LocalCacheSync {
     return _instance;
   }
 
+  /// 全局拦截器，即将加载某个数据时触发，可以用来构建全局缓存
   void Function(LocalCacheObject) willLoadValue;
+
+  /// 全局拦截器，已经加载完某个数据时
   void Function(Map<String, dynamic>, LocalCacheObject) didLoadValue;
 
   Uri _cachePath;
@@ -35,7 +41,11 @@ class LocalCacheSync {
 
   static LocalCacheLoader loaderOfChannel(String channel) =>
       LocalCacheLoader(channel);
+  // 用户偏好设置
   static UserDefaultSync get userDefault => UserDefaultSync();
+  // 图片缓存
+  static LocalCacheImageLoader get imageCache =>
+      LocalCacheImageLoader(r'_$LocalCacheImage.image');
 }
 
 /// 封装了一个简单的读写方法，在不存在值时返回默认值
@@ -168,7 +178,7 @@ class LocalCacheObject {
       );
   }
 
-  delete() {
+  void delete() {
     _value = null;
     file.deleteSync();
   }

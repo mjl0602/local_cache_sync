@@ -1,6 +1,5 @@
 library local_cache_sync;
 
-
 import 'package:flutter/material.dart';
 import 'package:local_cache_sync/local_cache_sync.dart';
 
@@ -149,14 +148,19 @@ class _KeyValueText extends StatelessWidget {
             ),
             margin: EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              k ?? "??",
+              k ?? "[??]",
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.white,
               ),
             ),
           ),
-          Expanded(child: Text(v ?? '??')),
+          Expanded(
+            child: Text(
+              v ?? '[Unknown Value]',
+              maxLines: 100,
+            ),
+          ),
         ],
       ),
     );

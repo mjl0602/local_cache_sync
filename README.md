@@ -163,3 +163,7 @@ class Device {
 
 不要在io密集型场景使用local_cache_sync，例如即时储存每秒10次的扫描结果。  
 虽然flutter中阻塞主线程不会导致UI卡顿，但是你仍不应当在io密集型场景使用，这超出了local_cache_sync设计的工作范围。
+
+## 致谢
+
+图片缓存功能修改自：https://github.com/pedia/file_cache 。感谢原作者的贡献。

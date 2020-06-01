@@ -42,6 +42,18 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            Center(
+              child: MaterialButton(
+                color: Colors.orange,
+                textColor: Colors.white,
+                child: Text('View All Image Cache'),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => CacheImageTablePage(),
+                  ));
+                },
+              ),
+            ),
             Container(
               padding: EdgeInsets.only(top: 40),
               child: Text("Simple Userdefault Demo:"),
