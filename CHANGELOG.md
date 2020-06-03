@@ -1,3 +1,7 @@
+## [1.2.1] Breaking change!
+
+* Add image cache.
+
 ## [1.2.0] Breaking change!
 
 * If you update to 1.2.0. You cannot read old data with same code!
