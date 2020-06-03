@@ -1,8 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:image/image.dart';
-
-import 'package:local_cache_sync/image_cache/file_cache.dart';
 import 'package:local_cache_sync/local_cache_sync.dart';
 
 /// 用于读取特定Channel的loader类，实现了增删查改方法
