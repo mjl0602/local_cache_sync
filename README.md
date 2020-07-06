@@ -9,7 +9,7 @@
 pubspec.yaml
 ```yaml
   path_provider: ^1.4.5
-  local_cache_sync: ^1.1.0
+  local_cache_sync: ^1.2.1
 ```
 
 Set Cache Path.
