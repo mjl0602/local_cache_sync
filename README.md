@@ -127,7 +127,7 @@ class Device {
     this.type,
   });
 
-  Device.formJson(Map<String, dynamic> map)
+  Device.fromJson(Map<String, dynamic> map)
       : this(
           uuid: map['uuid'],
           name: map['name'],
