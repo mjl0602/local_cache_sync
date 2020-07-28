@@ -107,7 +107,7 @@ bool isAutoLogin = ProjectCustomUserDefault.autoLogin.value
 
 `LocalCacheLoader`在内部实现了懒加载的效果：只有取`value`属性时数据才真正被加载。  
 
-在应用中，加入你有1-100号设备显示在Listview.builder中，只有100号设备即将进入屏幕中时，100号设备的缓存参数才会被真正加载。也就是说LocalCacheLoader不会导致长列表卡顿。
+在应用中，假如你有1-100号设备显示在Listview.builder中，只有100号设备即将进入屏幕中时，100号设备的缓存参数才会被真正加载。也就是说LocalCacheLoader不会导致长列表卡顿。
 
 ### Model Example
 
