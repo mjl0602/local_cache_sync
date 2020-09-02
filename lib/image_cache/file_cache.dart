@@ -216,8 +216,8 @@ class CacheStats {
   }
 }
 
-class ScanResult {
-  ScanResult({
+class _ScanResult {
+  _ScanResult({
     this.fileCount,
     this.bytes,
     this.deleteCount,
@@ -273,7 +273,7 @@ class FileCache {
       );
 
       if (scan) {
-        fileCache.scanFolder().then((ScanResult res) {
+        fileCache.scanFolder().then((_ScanResult res) {
           debugPrint("FileCache in scan, delete ${res.deleteCount} file.");
           fileCache.stats.bytesInFile = res.bytes;
           completer.complete(fileCache);
@@ -288,7 +288,7 @@ class FileCache {
 
   static Future<FileCache> _instance;
 
-  Future<ScanResult> scanFolder() async {
+  Future<_ScanResult> scanFolder() async {
     int fileCount = 0;
     int bytes = 0;
     int deleteCount = 0;
@@ -321,7 +321,7 @@ class FileCache {
         }
       }
     }
-    return new ScanResult(
+    return new _ScanResult(
       fileCount: fileCount,
       bytes: bytes,
       deleteCount: deleteCount,

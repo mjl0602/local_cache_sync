@@ -1,8 +1,8 @@
 library local_cache_sync;
 
-export './cacheViewTablePage.dart';
-export './cacheChannelListPage.dart';
-export './cacheImageTablePage.dart';
+export 'pages/cacheViewTablePage.dart';
+export 'pages/cacheChannelListPage.dart';
+export 'pages/cacheImageTablePage.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -31,11 +31,14 @@ class LocalCacheSync {
   void Function(Map<String, dynamic>, LocalCacheObject) didLoadValue;
 
   Uri _cachePath;
-  void setCachePath(Directory rootPath, [String cacheName = '']) =>
+  void setCachePath(Directory rootPath, [String cacheName = 'sync_cache']) =>
       _cachePath = rootPath.uri.resolve(cacheName);
 
   Uri get cachePath {
-    assert(_cachePath != null, 'Cache path must not be null. 缓存路径不可设置为空。');
+    assert(
+      _cachePath != null,
+      '\nERROR: Cache path must not be null.' '\nERROR:缓存路径不可设置为空。',
+    );
     return _cachePath;
   }
 
@@ -93,6 +96,20 @@ class LocalCacheLoader {
 
   Uri get directoryPath => LocalCacheSync().cachePath.resolve('$channel/');
 
+  CacheInfo get cacheInfo {
+    List<FileSystemEntity> list = directory.listSync();
+    var fileList =
+        list.where((element) => element is File).toList().cast<File>();
+    var count = 0;
+    for (var file in fileList) {
+      count += file.readAsBytesSync().length;
+    }
+    return CacheInfo(
+      cacheCount: fileList.length,
+      cacheLength: count,
+    );
+  }
+
   Directory get directory {
     var d = Directory.fromUri(directoryPath);
     if (!d.existsSync()) {
@@ -129,6 +146,40 @@ class LocalCacheLoader {
   // 清除全部
   void clearAll() {
     directory.deleteSync(recursive: true);
+  }
+}
+
+class CacheInfo {
+  final int cacheCount;
+  final int cacheLength;
+
+  CacheInfo({this.cacheCount, this.cacheLength});
+
+  String get sizeDesc => calculateSize(cacheLength / 1);
+
+  static String calculateSize(double limit) {
+    var size = '';
+    if (limit < 0.1 * 1024) {
+      size = limit.toStringAsFixed(2) + ' B';
+    } else if (limit < 0.1 * 1024 * 1024) {
+      size = (limit / 1024).toStringAsFixed(2) + ' KB';
+    } else if (limit < 0.1 * 1024 * 1024 * 1024) {
+      size = (limit / (1024 * 1024)).toStringAsFixed(2) + ' MB';
+    } else {
+      size = (limit / (1024 * 1024 * 1024)).toStringAsFixed(2) + ' GB';
+    }
+    var sizeStr = size + '';
+    var index = sizeStr.indexOf('.');
+    String dou = sizeStr.substring(index + 1, 2);
+    if (dou == '00') {
+      return sizeStr.substring(0, index) + sizeStr.substring(index + 3, 2);
+    }
+    return size;
+  }
+
+  @override
+  String toString() {
+    return "Cache Count: $cacheCount / Cache Data: $sizeDesc";
   }
 }
 

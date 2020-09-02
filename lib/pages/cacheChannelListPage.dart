@@ -50,6 +50,8 @@ class _Row extends StatelessWidget {
 
   String get name => fullChannelPath.split('/').last;
 
+  CacheInfo get cacheInfo => LocalCacheLoader(name).cacheInfo;
+
   const _Row({
     Key key,
     this.fullChannelPath,
@@ -66,7 +68,19 @@ class _Row extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(name),
+            Row(
+              children: [
+                Text(name),
+              ],
+            ),
+            Container(height: 6),
+            Text(
+              "($cacheInfo)",
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red,
+              ),
+            ),
             Container(height: 6),
             Text(
               fullChannelPath,

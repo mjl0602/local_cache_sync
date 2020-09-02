@@ -1,4 +1,9 @@
-## [1.2.1] Breaking change!
+## [1.2.2] Add Size Calculate
+
+* Now can view total cache size of channel by LocalCacheLoader(channel).cacheInfo.
+* Now can view every total cache size on CacheChannelListPage.
+
+## [1.2.1] Add ImageCache
 
 * Add image cache.
 
