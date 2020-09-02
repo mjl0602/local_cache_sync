@@ -20,7 +20,6 @@ class _CacheImageTablePageState extends State<CacheImageTablePage> {
     setState(() {
       list = LocalCacheSync.imageCache.all;
     });
-    // print(list[0].readAsBytesSync());
     super.initState();
   }
 

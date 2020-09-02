@@ -100,6 +100,23 @@ class LocalCacheLoader {
     List<FileSystemEntity> list = directory.listSync();
     var fileList =
         list.where((element) => element is File).toList().cast<File>();
+    if (r'_$LocalCacheImage.image' == channel) {
+      var dList = list
+          .where(
+            (element) => element is Directory,
+          )
+          .toList()
+          .cast<Directory>();
+      for (var d in dList) {
+        var list = d
+            .listSync()
+            .where((element) => element is File)
+            .toList()
+            .cast<File>();
+        // print(list);
+        fileList.addAll(list);
+      }
+    }
     var count = 0;
     for (var file in fileList) {
       count += file.readAsBytesSync().length;
@@ -170,9 +187,10 @@ class CacheInfo {
     }
     var sizeStr = size + '';
     var index = sizeStr.indexOf('.');
-    String dou = sizeStr.substring(index + 1, 2);
+    String dou = sizeStr.substring(index + 1, index + 1 + 2);
     if (dou == '00') {
-      return sizeStr.substring(0, index) + sizeStr.substring(index + 3, 2);
+      return sizeStr.substring(0, index) +
+          sizeStr.substring(index + 3, index + 3 + 2);
     }
     return size;
   }

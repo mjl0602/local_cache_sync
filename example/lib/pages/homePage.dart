@@ -1,5 +1,6 @@
 import 'package:example/model/device.dart';
 import 'package:flutter/material.dart';
+import 'package:local_cache_sync/image_cache/file_cache_image.dart';
 import 'package:local_cache_sync/local_cache_sync.dart';
 
 class HomePage extends StatefulWidget {
@@ -93,6 +94,11 @@ class _HomePageState extends State<HomePage> {
                 });
               },
             ),
+            LocalCacheImage(
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1599049109307&di=2240df01d16252efd28725060c7a3b6f&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fforum%2Fw%3D580%2Fsign%3De6389adcb50e7bec23da03e91f2fb9fa%2F6c3822381f30e92467a012e241086e061c95f78a.jpg',
+              height: 200,
+              fit: BoxFit.contain,
+            )
           ],
         ),
       ),
