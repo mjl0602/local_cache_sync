@@ -6,7 +6,9 @@ export 'pages/cacheImageTablePage.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:local_cache_sync/image_cache/local_cache_image.dart';
+import 'package:local_cache_sync/pages/cacheChannelListPage.dart';
 
 /// LocalCacheSync单例，用于储存缓存路径，并暴露常用接口
 class LocalCacheSync {
@@ -23,6 +25,13 @@ class LocalCacheSync {
     }
     return _instance;
   }
+
+  static Future<void> pushDetailPage(BuildContext context) =>
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx) => CacheChannelListPage(),
+        ),
+      );
 
   /// 全局拦截器，即将加载某个数据时触发，可以用来构建全局缓存
   void Function(LocalCacheObject) willLoadValue;

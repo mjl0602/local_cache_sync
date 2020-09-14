@@ -37,9 +37,7 @@ class _HomePageState extends State<HomePage> {
                 textColor: Colors.white,
                 child: Text('View All Channel'),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => CacheChannelListPage(),
-                  ));
+                  LocalCacheSync.pushDetailPage(context);
                 },
               ),
             ),

@@ -1,7 +1,11 @@
+## [1.2.3] Add push func
+
+* Now can use `LocalCacheSync.pushDetailPage(context)` view cache detail.
+
 ## [1.2.2] Add Size Calculate
 
-* Now can view total cache size of channel by LocalCacheLoader(channel).cacheInfo.
-* Now can view every total cache size on CacheChannelListPage.
+* Now can view total cache size of channel by `LocalCacheLoader(channel).cacheInfo`.
+* Now can view every total cache size on `CacheChannelListPage`.
 
 ## [1.2.1] Add ImageCache
 
@@ -11,8 +15,8 @@
 
 * If you update to 1.2.0. You cannot read old data with same code!
 * Add golbal cache name.
-* Add CacheChannelListPage widget.
-* Add DefaultValueCache.
+* Add `CacheChannelListPage` widget.
+* Add `DefaultValueCache` class.
 
 ## [1.1.1] Release
 
@@ -20,7 +24,7 @@
 
 ## [1.1.0] Release
 
-* Add UserDefaultSync class.
+* Add `UserDefaultSync` class.
 
 ## [1.0.0] Release
 
