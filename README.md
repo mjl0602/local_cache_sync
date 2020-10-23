@@ -40,6 +40,8 @@ getTemporaryDirectory().then((uri) {
 
 使用`local_cache_sync`保存与读取参数都是同步的，这意味着赋值即是保存，而且在`StatelessWidget`中，可以立即使用数据。
 
+基础用法
+
 ```dart
 Switch(
   value: LocalCacheSync.userDefault.getWithKey<bool>('switch-A'),
@@ -47,6 +49,22 @@ Switch(
     setState(() {
       LocalCacheSync.userDefault.setWithKey<bool>('switch-A', v);
     });
+  },
+),
+```
+
+更方便的使用方法（推荐）
+
+```dart
+// Creat class:
+class MySetting {
+  static var autoLogin = const DefaultValueCache<bool>('autoLogin', false);
+}
+// build
+Switch(
+  value: MySetting.autoLogin.value,
+  onChanged: (v) {
+    setState(()=>MySetting.autoLogin.value = v);
   },
 ),
 ```
@@ -85,6 +103,7 @@ Map res = LocalCacheSync.userDefault['x-config'];
 
 ## DefaultValueCache
 Eazy used with static property.
+只需要静态属性就可以使用缓存，并为缓存指定默认值，不担心缓存为空。
 
 ```dart
 // Creat class:
@@ -139,9 +158,15 @@ class Device {
   static List<Device> all() {
     return _loader.all
         .map<Device>(
-          (cache) => Device.fromJson(cache),
+          (cache) => Device.fromJson(cache.value),
         )
         .toList();
+  }
+
+  // LocalCacheObject仅在取出Value时进行数据加载
+  // 在数据很大时，这样可以提升列表加载性能
+  static List<LocalCacheObject> allWithLazyLoad() {
+    return _loader.all;
   }
 
   LocalCacheObject save() {

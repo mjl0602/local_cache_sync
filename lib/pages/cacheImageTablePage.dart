@@ -34,14 +34,14 @@ class _CacheImageTablePageState extends State<CacheImageTablePage> {
         itemCount: list.length,
         itemBuilder: (ctx, index) => GestureDetector(
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (ctx) => SimpleDialog(
-                children: <Widget>[
-                  LocalCacheImage('https://segmentfault.com/img/bVbHoL3'),
-                ],
-              ),
-            );
+            // showDialog(
+            //   context: context,
+            //   builder: (ctx) => SimpleDialog(
+            //     children: <Widget>[
+            //       LocalCacheImage('https://segmentfault.com/img/bVbHoL3'),
+            //     ],
+            //   ),
+            // );
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

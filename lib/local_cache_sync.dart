@@ -105,6 +105,7 @@ class LocalCacheLoader {
 
   Uri get directoryPath => LocalCacheSync().cachePath.resolve('$channel/');
 
+  /// 统计缓存信息
   CacheInfo get cacheInfo {
     List<FileSystemEntity> list = directory.listSync();
     var fileList =

@@ -1,4 +1,8 @@
-## [1.2.3] Add push func
+## [1.2.4] Update Readme
+
+* Update Readme.
+
+## [1.2.3] Add Data Detail Page
 
 * Now can use `LocalCacheSync.pushDetailPage(context)` view cache detail.
 
