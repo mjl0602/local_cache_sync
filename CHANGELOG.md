@@ -1,3 +1,7 @@
+## [1.2.5] Update Readme
+
+* Update Readme.
+* Fix bug: return null when json.decode work with wrong string.
 ## [1.2.4] Update Readme
 
 * Update Readme.
@@ -18,7 +22,7 @@
 ## [1.2.0] Breaking change!
 
 * If you update to 1.2.0. You cannot read old data with same code!
-* Add golbal cache name.
+* Add global cache name.
 * Add `CacheChannelListPage` widget.
 * Add `DefaultValueCache` class.
 

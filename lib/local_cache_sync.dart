@@ -246,7 +246,12 @@ class LocalCacheObject {
       return null;
     }
     var content = file.readAsStringSync();
-    return json.decode(content);
+    try {
+      return json.decode(content);
+    } catch (e) {
+      print('Error Decode:$content($e)');
+      return null;
+    }
   }
 
   File save() {

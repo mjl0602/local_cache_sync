@@ -184,6 +184,13 @@ class Device {
 你也可以另外封装loader来读写其他信息，对于轻量级的储存，以上是非常简单易用的。
 
 
+### Cache Detail Overview
+
+可以快速查看保存的数据：
+```dart
+LocalCacheSync.pushDetailPage(context)
+```
+
 ## 警告
 
 不要在io密集型场景使用local_cache_sync，例如即时储存每秒10次的扫描结果。  

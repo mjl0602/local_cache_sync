@@ -60,13 +60,19 @@ class _Row extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> kvChildren = [];
-    List<String> l = object.value.keys.toList();
+    var value = object.value;
+    if (value == null) {
+      value = {
+        'Error': 'Json Encode Error',
+      };
+    }
+    List<String> l = value.keys.toList();
     for (var i = 0; i < l.length; i++) {
       var k = l[i];
       kvChildren.add(
         _KeyValueText(
           k: k,
-          v: object.value[k].toString(),
+          v: value[k].toString(),
         ),
       );
     }
