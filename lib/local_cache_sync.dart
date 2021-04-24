@@ -2,7 +2,6 @@ library local_cache_sync;
 
 export 'pages/cacheViewTablePage.dart';
 export 'pages/cacheChannelListPage.dart';
-export 'pages/cacheImageTablePage.dart';
 import 'dart:convert';
 import 'dart:io';
 
