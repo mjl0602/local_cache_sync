@@ -1,3 +1,5 @@
+## [2.0.0-nullsafety.0] Add nullsafety
+
 ## [1.3.0] Remove image cache feature
 * Remove image cache feature
 ## [1.2.5] Update Readme

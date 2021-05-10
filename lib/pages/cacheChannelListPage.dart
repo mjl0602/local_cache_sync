@@ -13,7 +13,7 @@ class _CacheChannelListPageState extends State<CacheChannelListPage> {
 
   @override
   void initState() {
-    var res = LocalCacheSync.instance.cachePath;
+    var res = LocalCacheSync.instance!.cachePath!;
     var channelList = Directory.fromUri(res).listSync();
     for (var channel in channelList) {
       list.add(channel.path);
@@ -45,22 +45,22 @@ class _CacheChannelListPageState extends State<CacheChannelListPage> {
 }
 
 class _Row extends StatelessWidget {
-  final String fullChannelPath;
-  final Function onTap;
+  final String? fullChannelPath;
+  final Function? onTap;
 
-  String get name => fullChannelPath.split('/').last;
+  String get name => fullChannelPath!.split('/').last;
 
   CacheInfo get cacheInfo => LocalCacheLoader(name).cacheInfo;
 
   const _Row({
-    Key key,
+    Key? key,
     this.fullChannelPath,
     this.onTap,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap as void Function()?,
       child: Container(
         color: Colors.white,
         margin: EdgeInsets.only(bottom: 1),
@@ -83,7 +83,7 @@ class _Row extends StatelessWidget {
             ),
             Container(height: 6),
             Text(
-              fullChannelPath,
+              fullChannelPath!,
               style: TextStyle(
                 fontSize: 12,
                 color: Color(0xff9b9b9b),

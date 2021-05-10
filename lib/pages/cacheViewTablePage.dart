@@ -6,7 +6,7 @@ import 'package:local_cache_sync/local_cache_sync.dart';
 class CacheViewTablePage extends StatefulWidget {
   final String channel;
 
-  const CacheViewTablePage(this.channel, {Key key}) : super(key: key);
+  const CacheViewTablePage(this.channel, {Key? key}) : super(key: key);
 
   @override
   _CacheViewTablePageState createState() => _CacheViewTablePageState();
@@ -28,7 +28,7 @@ class _CacheViewTablePageState extends State<CacheViewTablePage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(widget.channel ?? '#ERROR#'),
+        title: Text(widget.channel),
       ),
       body: ListView.builder(
         itemCount: list.length,
@@ -47,12 +47,12 @@ class _CacheViewTablePageState extends State<CacheViewTablePage> {
 }
 
 class _Row extends StatelessWidget {
-  final LocalCacheObject object;
+  final LocalCacheObject? object;
 
-  final Function onDelete;
+  final Function? onDelete;
 
   const _Row({
-    Key key,
+    Key? key,
     this.object,
     this.onDelete,
   }) : super(key: key);
@@ -60,7 +60,7 @@ class _Row extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> kvChildren = [];
-    var value = object.value;
+    var value = object!.value;
     if (value == null) {
       value = {
         'Error': 'Json Encode Error',
@@ -98,7 +98,7 @@ class _Row extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(bottom: 6),
                   child: Text(
-                    'ID:${object.id}',
+                    'ID:${object!.id}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black.withOpacity(0.36),
@@ -119,7 +119,7 @@ class _Row extends StatelessWidget {
                 icon: Icon(
                   Icons.delete,
                 ),
-                onPressed: onDelete,
+                onPressed: onDelete as void Function()?,
               ),
             ],
           )
@@ -130,9 +130,9 @@ class _Row extends StatelessWidget {
 }
 
 class _KeyValueText extends StatelessWidget {
-  final String k, v;
+  final String? k, v;
   const _KeyValueText({
-    Key key,
+    Key? key,
     this.k,
     this.v,
   }) : super(key: key);

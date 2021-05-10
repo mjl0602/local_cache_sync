@@ -7,7 +7,7 @@ class LocalCacheImageLoader {
 
   LocalCacheImageLoader(this.channel);
 
-  Uri get directoryPath => LocalCacheSync().cachePath.resolve('$channel/');
+  Uri get directoryPath => LocalCacheSync().cachePath!.resolve('$channel/');
 
   Directory get directory {
     var d = Directory.fromUri(directoryPath);
@@ -30,14 +30,3 @@ class LocalCacheImageLoader {
     return l;
   }
 }
-
-// 读取缓存图片信息
-// class LocalCacheImageInfo extends LocalCacheLoader {
-//   LocalCacheImageInfo(this.url) : super(r'_$LocalCacheImageInfo');
-//   final String url;
-//   CacheEntry cacheEntry;
-
-//   Size get size {
-//     Image.fromBytes(width, height, bytes)
-//   }
-// }

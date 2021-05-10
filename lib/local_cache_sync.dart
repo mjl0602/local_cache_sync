@@ -12,13 +12,13 @@ import 'package:local_cache_sync/pages/cacheChannelListPage.dart';
 /// LocalCacheSync单例，用于储存缓存路径，并暴露常用接口
 class LocalCacheSync {
   // 工厂模式
-  factory LocalCacheSync() => _getInstance();
-  static LocalCacheSync get instance => _getInstance();
-  static LocalCacheSync _instance;
+  factory LocalCacheSync() => _getInstance()!;
+  static LocalCacheSync? get instance => _getInstance();
+  static LocalCacheSync? _instance;
   LocalCacheSync._internal() {
     // 初始化
   }
-  static LocalCacheSync _getInstance() {
+  static LocalCacheSync? _getInstance() {
     if (_instance == null) {
       _instance = new LocalCacheSync._internal();
     }
@@ -33,16 +33,16 @@ class LocalCacheSync {
       );
 
   /// 全局拦截器，即将加载某个数据时触发，可以用来构建全局缓存
-  void Function(LocalCacheObject) willLoadValue;
+  void Function(LocalCacheObject)? willLoadValue;
 
   /// 全局拦截器，已经加载完某个数据时
-  void Function(Map<String, dynamic>, LocalCacheObject) didLoadValue;
+  void Function(Map<String, dynamic>?, LocalCacheObject)? didLoadValue;
 
-  Uri _cachePath;
+  Uri? _cachePath;
   void setCachePath(Directory rootPath, [String cacheName = 'sync_cache']) =>
       _cachePath = rootPath.uri.resolve(cacheName);
 
-  Uri get cachePath {
+  Uri? get cachePath {
     assert(
       _cachePath != null,
       '\nERROR: Cache path must not be null.' '\nERROR:缓存路径不可设置为空。',
@@ -62,13 +62,13 @@ class LocalCacheSync {
 /// 封装了一个简单的读写方法，在不存在值时返回默认值
 class DefaultValueCache<T> {
   final String key;
-  final T defaultValue;
+  final T? defaultValue;
 
   const DefaultValueCache(this.key, [this.defaultValue]);
 
-  T get value => LocalCacheSync.userDefault[key] ?? defaultValue;
+  T? get value => LocalCacheSync.userDefault[key] ?? defaultValue;
 
-  set value(T value) {
+  set value(T? value) {
     LocalCacheSync.userDefault[key] = value;
   }
 }
@@ -87,12 +87,12 @@ class UserDefaultSync extends LocalCacheLoader {
   }
 
   /// 使用Key获取一个值
-  T getWithKey<T>(String k) {
+  T? getWithKey<T>(String k) {
     var map = LocalCacheObject(k, channel).value;
     if (map?.isEmpty != false) {
       return null;
     }
-    return map['v'] is T ? map['v'] : null;
+    return map!['v'] is T ? map['v'] : null;
   }
 }
 
@@ -102,7 +102,7 @@ class LocalCacheLoader {
 
   LocalCacheLoader(this.channel);
 
-  Uri get directoryPath => LocalCacheSync().cachePath.resolve('$channel/');
+  Uri get directoryPath => LocalCacheSync().cachePath!.resolve('$channel/');
 
   /// 统计缓存信息
   CacheInfo get cacheInfo {
@@ -176,12 +176,12 @@ class LocalCacheLoader {
 }
 
 class CacheInfo {
-  final int cacheCount;
-  final int cacheLength;
+  final int? cacheCount;
+  final int? cacheLength;
 
   CacheInfo({this.cacheCount, this.cacheLength});
 
-  String get sizeDesc => calculateSize(cacheLength / 1);
+  String get sizeDesc => calculateSize(cacheLength! / 1);
 
   static String calculateSize(double limit) {
     var size = '';
@@ -217,17 +217,17 @@ class LocalCacheObject {
 
   String channel;
   LocalCacheObject(this.id,
-      [this.channel = r'_$DefaultChannel', Map<String, dynamic> value])
+      [this.channel = r'_$DefaultChannel', Map<String, dynamic>? value])
       : this._value = value;
 
-  Uri get path => LocalCacheSync().cachePath.resolve('$channel/');
+  Uri get path => LocalCacheSync().cachePath!.resolve('$channel/');
   File get file => File.fromUri(path.resolve('$realId.json'));
 
   bool get isCache => _value != null;
 
-  Map<String, dynamic> _value;
+  Map<String, dynamic>? _value;
 
-  Map<String, dynamic> get value {
+  Map<String, dynamic>? get value {
     if (_value == null) {
       LocalCacheSync().willLoadValue?.call(this);
       _value = read();
@@ -240,7 +240,7 @@ class LocalCacheObject {
     _value = null;
   }
 
-  Map<String, dynamic> read() {
+  Map<String, dynamic>? read() {
     if (!file.existsSync()) {
       return null;
     }
