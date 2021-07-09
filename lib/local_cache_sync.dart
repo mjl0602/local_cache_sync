@@ -265,4 +265,30 @@ class LocalCacheObject {
     _value = null;
     file.deleteSync();
   }
+
+  Future<Map<String, dynamic>?> readAsync() async {
+    if (!file.existsSync()) {
+      return null;
+    }
+    var content = await file.readAsString();
+    try {
+      return json.decode(content);
+    } catch (e) {
+      print('Error Decode:$content($e)');
+      return null;
+    }
+  }
+
+  Future<File> saveAsync() async {
+    await file.create(recursive: true);
+    await file.writeAsString(
+      JsonEncoder.withIndent('   ').convert(_value ?? {}),
+    );
+    return file;
+  }
+
+  Future<void> deleteAsync() async {
+    _value = null;
+    await file.delete();
+  }
 }

@@ -1,3 +1,6 @@
+## [2.0.1] Add Async Func
+* Add some async functions to LocalCacheObject.
+
 ## [2.0.0-nullsafety.0] Add nullsafety
 
 ## [1.3.0] Remove image cache feature
