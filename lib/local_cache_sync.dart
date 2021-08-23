@@ -62,11 +62,11 @@ class LocalCacheSync {
 /// 封装了一个简单的读写方法，在不存在值时返回默认值
 class DefaultValueCache<T> {
   final String key;
-  final T? defaultValue;
+  final T defaultValue;
 
-  const DefaultValueCache(this.key, [this.defaultValue]);
+  const DefaultValueCache(this.key, this.defaultValue);
 
-  T? get value => LocalCacheSync.userDefault[key] ?? defaultValue;
+  T get value => LocalCacheSync.userDefault[key] ?? defaultValue;
 
   set value(T? value) {
     LocalCacheSync.userDefault[key] = value;

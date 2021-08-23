@@ -1,3 +1,5 @@
+## [2.0.2] Fix DefaultValueCache
+* Change DefaultValueCache.value to no-null.
 ## [2.0.1] Add Async Func
 * Add some async functions to LocalCacheObject.
 
