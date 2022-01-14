@@ -79,9 +79,7 @@ class DefaultValueCache<T> {
 class UserDefaultSync extends LocalCacheLoader {
   UserDefaultSync() : super(r'_$LocalCacheDefault');
 
-  Uri get directoryPath =>
-      (LocalCacheSync()._userDefaultCachePath ?? LocalCacheSync().cachePath)!
-          .resolve('$channel/');
+  Uri get directoryPath => cachePath.resolve('$channel/');
 
   /// 用户缓存可以单独指定一个路径
   /// 例如，可以把其他数据放在会清理的文件夹，将用户缓存放在不会被清理的文件夹(token等数据)
@@ -91,12 +89,9 @@ class UserDefaultSync extends LocalCacheLoader {
   ]) =>
       LocalCacheSync()._userDefaultCachePath = rootPath.uri.resolve(cacheName);
 
-  static Uri? get cachePath {
-    assert(
-      LocalCacheSync()._userDefaultCachePath != null,
-      '\nERROR: Cache path must not be null.' '\nERROR:缓存路径不可设置为空。',
-    );
-    return LocalCacheSync()._userDefaultCachePath;
+  static Uri get cachePath {
+    return (LocalCacheSync()._userDefaultCachePath ??
+        LocalCacheSync().cachePath)!;
   }
 
   dynamic operator [](String key) => getWithKey(key);
@@ -104,18 +99,27 @@ class UserDefaultSync extends LocalCacheLoader {
   void operator []=(String key, dynamic value) => setWithKey(key, value);
 
   /// 使用Key保存一个值
-  LocalCacheObject setWithKey<T>(String k, T v) {
-    return LocalCacheObject(k, channel, {'v': v})..save();
+  UserDefaultCacheObject setWithKey<T>(String k, T v) {
+    return UserDefaultCacheObject(k, channel, {'v': v})..save();
   }
 
   /// 使用Key获取一个值
   T? getWithKey<T>(String k) {
-    var map = LocalCacheObject(k, channel).value;
+    var map = UserDefaultCacheObject(k, channel).value;
     if (map?.isEmpty != false) {
       return null;
     }
     return map!['v'] is T ? map['v'] : null;
   }
+}
+
+/// 保存用户数据，使用特殊路径
+class UserDefaultCacheObject extends LocalCacheObject {
+  UserDefaultCacheObject(String id,
+      [String channel = r'_$DefaultChannel', Map<String, dynamic>? value])
+      : super(id, channel, value);
+  @override
+  Uri get path => UserDefaultSync.cachePath.resolve('$channel/');
 }
 
 /// 用于读取特定Channel的loader类，实现了增删查改方法

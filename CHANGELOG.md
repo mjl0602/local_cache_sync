@@ -1,4 +1,4 @@
-## [2.1.0] Fix DefaultValueCache
+## [2.1.1] Fix DefaultValueCache
 * Remove image cache loader.
 * Now can set spacial path to UserDefaultSync use UserDefaultSync.setCachePath(url).
 
