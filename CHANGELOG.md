@@ -1,4 +1,7 @@
-## [2.1.1] Fix DefaultValueCache
+## [2.1.2] Update CacheChannelListPage
+* Make sure CacheChannelListPage can view UserDefaultSync values;
+
+## [2.1.1] Add UserDefaultSync.setCachePath(url)
 * Remove image cache loader.
 * Now can set spacial path to UserDefaultSync use UserDefaultSync.setCachePath(url).
 

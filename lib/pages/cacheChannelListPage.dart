@@ -13,8 +13,16 @@ class _CacheChannelListPageState extends State<CacheChannelListPage> {
 
   @override
   void initState() {
-    var res = LocalCacheSync.instance!.cachePath!;
-    var channelList = Directory.fromUri(res).listSync();
+    var channelList = Directory.fromUri(
+      LocalCacheSync.instance!.cachePath!,
+    ).listSync();
+    // 补上用户的
+    if (UserDefaultSync.cachePath != LocalCacheSync.instance!.cachePath!) {
+      channelList = Directory.fromUri(
+            UserDefaultSync.cachePath,
+          ).listSync() +
+          channelList;
+    }
     for (var channel in channelList) {
       list.add(channel.path);
     }

@@ -119,7 +119,7 @@ class _Row extends StatelessWidget {
                 icon: Icon(
                   Icons.delete,
                 ),
-                onPressed: onDelete as void Function()?,
+                onPressed: () => onDelete?.call(),
               ),
             ],
           )
