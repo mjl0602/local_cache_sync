@@ -23,6 +23,11 @@ void main() async {
     await getTemporaryDirectory(),
     'example_app/',
   );
+  // Can set special path to UserDefaultSync
+  UserDefaultSync.setCachePath(
+    await getApplicationSupportDirectory(),
+    'example_app/',
+  );
   runApp(MyApp());
 }
 ```

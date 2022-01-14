@@ -1,5 +1,10 @@
+## [2.1.0] Fix DefaultValueCache
+* Remove image cache loader.
+* Now can set spacial path to UserDefaultSync use UserDefaultSync.setCachePath(url).
+
 ## [2.0.2] Fix DefaultValueCache
 * Change DefaultValueCache.value to no-null.
+
 ## [2.0.1] Add Async Func
 * Add some async functions to LocalCacheObject.
 

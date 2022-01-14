@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:local_cache_sync/image_cache/local_cache_image.dart';
 import 'package:local_cache_sync/pages/cacheChannelListPage.dart';
 
 /// LocalCacheSync单例，用于储存缓存路径，并暴露常用接口
@@ -50,13 +49,14 @@ class LocalCacheSync {
     return _cachePath;
   }
 
+  /// 用户缓存可以单独指定一个路径
+  /// 例如，可以把其他数据放在会清理的文件夹，将用户缓存放在不会被清理的文件夹(token等数据)
+  Uri? _userDefaultCachePath;
+
   static LocalCacheLoader loaderOfChannel(String channel) =>
       LocalCacheLoader(channel);
   // 用户偏好设置
   static UserDefaultSync get userDefault => UserDefaultSync();
-  // 图片缓存
-  static LocalCacheImageLoader get imageCache =>
-      LocalCacheImageLoader(r'_$LocalCacheImage.image');
 }
 
 /// 封装了一个简单的读写方法，在不存在值时返回默认值
@@ -74,8 +74,30 @@ class DefaultValueCache<T> {
 }
 
 /// 用于储存用户缓存数据，继承自LocalCacheLoader，实现了自己的读写方法，并增加了类型判断
+/// 用户缓存数据可以单独指定一个路径(使用setCachePath)
+/// 例如，可以把其他数据放在会清理的文件夹，将用户缓存放在不会被清理的文件夹(token等数据)
 class UserDefaultSync extends LocalCacheLoader {
   UserDefaultSync() : super(r'_$LocalCacheDefault');
+
+  Uri get directoryPath =>
+      (LocalCacheSync()._userDefaultCachePath ?? LocalCacheSync().cachePath)!
+          .resolve('$channel/');
+
+  /// 用户缓存可以单独指定一个路径
+  /// 例如，可以把其他数据放在会清理的文件夹，将用户缓存放在不会被清理的文件夹(token等数据)
+  static void setCachePath(
+    Directory rootPath, [
+    String cacheName = 'sync_cache',
+  ]) =>
+      LocalCacheSync()._userDefaultCachePath = rootPath.uri.resolve(cacheName);
+
+  static Uri? get cachePath {
+    assert(
+      LocalCacheSync()._userDefaultCachePath != null,
+      '\nERROR: Cache path must not be null.' '\nERROR:缓存路径不可设置为空。',
+    );
+    return LocalCacheSync()._userDefaultCachePath;
+  }
 
   dynamic operator [](String key) => getWithKey(key);
 
