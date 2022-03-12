@@ -133,6 +133,11 @@ class LocalCacheLoader {
   /// 统计缓存信息
   CacheInfo get cacheInfo {
     List<FileSystemEntity> list = directory.listSync();
+    if (list.length > 1000)
+      return CacheInfo(
+        cacheCount: list.length,
+        cacheLength: -1,
+      );
     var fileList =
         list.where((element) => element is File).toList().cast<File>();
     if (r'_$LocalCacheImage.image' == channel) {
@@ -189,6 +194,10 @@ class LocalCacheLoader {
 
   LocalCacheObject saveById(String id, Map<String, dynamic> value) {
     return LocalCacheObject(id, channel, value)..save();
+  }
+
+  LocalCacheObject saveByIdAsync(String id, Map<String, dynamic> value) {
+    return LocalCacheObject(id, channel, value)..saveAsync();
   }
 
   LocalCacheObject deleteById(String id) {

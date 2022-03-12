@@ -1,4 +1,7 @@
 ## [2.1.2] Update CacheChannelListPage
+* Add saveAsync function.
+* Will not caculate size if count bigger than 1000
+## [2.1.2] Update CacheChannelListPage
 * Make sure CacheChannelListPage can view UserDefaultSync values;
 
 ## [2.1.1] Add UserDefaultSync.setCachePath(url)
