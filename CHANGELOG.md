@@ -1,4 +1,4 @@
-## [2.1.2] Update CacheChannelListPage
+## [2.1.3] Update CacheChannelListPage
 * Add saveAsync function.
 * Will not caculate size if count bigger than 1000
 ## [2.1.2] Update CacheChannelListPage
