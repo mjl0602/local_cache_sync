@@ -2,7 +2,6 @@ name: local_cache_sync
 description: Cache json map to local file with Dart:io. Read cache with sync api.
 version: 2.1.3
 homepage: https://github.com/mjl0602
-publish_to: https://pub.dev
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
