@@ -1,9 +1,4 @@
-## [3.0.3] Fix Bug
-
-- Fix word spell.
-- Fix data view buider.
-
-## [3.0.1] Update
+## [3.1.0] Update
 
 - Support read as plain text or Uint8List.
 - Support preview data with custom widget.

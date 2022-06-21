@@ -67,7 +67,7 @@ class _CacheChannelListPageState extends State<CacheChannelListPage> {
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (ctx) => CacheViewTablePage(
-                list[index],
+                list[index].split('/').last,
                 builder: widget.builder,
               ),
             ));
