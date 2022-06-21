@@ -41,7 +41,7 @@ class _CacheViewTablePageState extends State<CacheViewTablePage> {
         itemBuilder: (ctx, index) {
           if (widget.builder != null) {
             var cell = widget.builder?.call(context, loader, list[index]);
-            if (cell is Widget) return cell;
+            if (cell != null) return cell;
           }
           return _Row(
             object: list[index],

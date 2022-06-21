@@ -1,6 +1,7 @@
-## [3.0.2] Fix Bug
+## [3.0.3] Fix Bug
 
-- Fix word spell
+- Fix word spell.
+- Fix data view buider.
 
 ## [3.0.1] Update
 
