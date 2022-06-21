@@ -1,4 +1,8 @@
-## [3.0.1] Update CacheChannelListPage
+## [3.0.2] Fix Bug
+
+- Fix word spell
+
+## [3.0.1] Update
 
 - Support read as plain text or Uint8List.
 - Support preview data with custom widget.

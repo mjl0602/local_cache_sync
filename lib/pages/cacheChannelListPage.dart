@@ -5,7 +5,7 @@ import 'package:local_cache_sync/local_cache_sync.dart';
 
 typedef DataRowBuilder = Widget? Function(
   BuildContext context,
-  LocalCacheLoader laoder,
+  LocalCacheLoader loader,
   LocalCacheObject object,
 );
 
