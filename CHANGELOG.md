@@ -1,4 +1,4 @@
-## [3.0.0] Update CacheChannelListPage
+## [3.0.1] Update CacheChannelListPage
 
 - Support read as plain text or Uint8List.
 - Support preview data with custom widget.

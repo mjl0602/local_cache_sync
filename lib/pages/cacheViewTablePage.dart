@@ -6,7 +6,7 @@ import 'package:local_cache_sync/local_cache_sync.dart';
 class CacheViewTablePage extends StatefulWidget {
   final String channel;
 
-  final Widget? Function(LocalCacheLoader, LocalCacheObject)? builder;
+  final DataRowBuilder? builder;
 
   const CacheViewTablePage(
     this.channel, {
@@ -40,7 +40,7 @@ class _CacheViewTablePageState extends State<CacheViewTablePage> {
         itemCount: list.length,
         itemBuilder: (ctx, index) {
           if (widget.builder != null) {
-            var cell = widget.builder?.call(loader, list[index]);
+            var cell = widget.builder?.call(context, loader, list[index]);
             if (cell is Widget) return cell;
           }
           return _Row(

@@ -1,18 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:local_cache_sync/core/loader.dart';
 import 'package:local_cache_sync/local_cache_sync.dart';
 
+typedef DataRowBuilder = Widget? Function(
+  BuildContext context,
+  LocalCacheLoader laoder,
+  LocalCacheObject object,
+);
+
 class CacheChannelListPage extends StatefulWidget {
-  final Widget? Function(LocalCacheLoader, LocalCacheObject)? builder;
+  final DataRowBuilder? builder;
 
   const CacheChannelListPage({Key? key, this.builder}) : super(key: key);
 
   static preview(
-    BuildContext context,
-    Widget? Function(LocalCacheLoader, LocalCacheObject) builder,
-  ) {
+    BuildContext context, [
+    DataRowBuilder? builder,
+  ]) {
     return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => CacheChannelListPage(
@@ -61,7 +66,10 @@ class _CacheChannelListPageState extends State<CacheChannelListPage> {
           fullChannelPath: list[index],
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (ctx) => CacheViewTablePage(list[index]),
+              builder: (ctx) => CacheViewTablePage(
+                list[index],
+                builder: widget.builder,
+              ),
             ));
           },
         ),
