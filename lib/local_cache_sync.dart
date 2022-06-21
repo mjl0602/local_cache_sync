@@ -1,11 +1,15 @@
 library local_cache_sync;
 
-export 'pages/cacheViewTablePage.dart';
-export 'pages/cacheChannelListPage.dart';
-import 'dart:convert';
+export 'package:local_cache_sync/core/loader.dart';
+export 'package:local_cache_sync/core/object.dart';
+export 'package:local_cache_sync/pages/cacheChannelListPage.dart';
+export 'package:local_cache_sync/pages/cacheViewTablePage.dart';
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:local_cache_sync/core/loader.dart';
+import 'package:local_cache_sync/core/object.dart';
 import 'package:local_cache_sync/pages/cacheChannelListPage.dart';
 
 /// LocalCacheSync单例，用于储存缓存路径，并暴露常用接口
@@ -53,8 +57,8 @@ class LocalCacheSync {
   /// 例如，可以把其他数据放在会清理的文件夹，将用户缓存放在不会被清理的文件夹(token等数据)
   Uri? _userDefaultCachePath;
 
-  static LocalCacheLoader loaderOfChannel(String channel) =>
-      LocalCacheLoader(channel);
+  static LocalCacheLoader loaderOfChannel(String channel, [CacheType? type]) =>
+      LocalCacheLoader(channel, type: type);
   // 用户偏好设置
   static UserDefaultSync get userDefault => UserDefaultSync();
 }
@@ -100,7 +104,7 @@ class UserDefaultSync extends LocalCacheLoader {
 
   /// 使用Key保存一个值
   UserDefaultCacheObject setWithKey<T>(String k, T v) {
-    return UserDefaultCacheObject(k, channel, {'v': v})..save();
+    return UserDefaultCacheObject(k, channel, {'v': v})..saveAsJson();
   }
 
   /// 使用Key获取一个值
@@ -110,220 +114,5 @@ class UserDefaultSync extends LocalCacheLoader {
       return null;
     }
     return map!['v'] is T ? map['v'] : null;
-  }
-}
-
-/// 保存用户数据，使用特殊路径
-class UserDefaultCacheObject extends LocalCacheObject {
-  UserDefaultCacheObject(String id,
-      [String channel = r'_$DefaultChannel', Map<String, dynamic>? value])
-      : super(id, channel, value);
-  @override
-  Uri get path => UserDefaultSync.cachePath.resolve('$channel/');
-}
-
-/// 用于读取特定Channel的loader类，实现了增删查改方法
-class LocalCacheLoader {
-  final String channel;
-
-  LocalCacheLoader(this.channel);
-
-  Uri get directoryPath => LocalCacheSync().cachePath!.resolve('$channel/');
-
-  /// 统计缓存信息
-  CacheInfo get cacheInfo {
-    List<FileSystemEntity> list = directory.listSync();
-    if (list.length > 1000)
-      return CacheInfo(
-        cacheCount: list.length,
-        cacheLength: -1,
-      );
-    var fileList =
-        list.where((element) => element is File).toList().cast<File>();
-    if (r'_$LocalCacheImage.image' == channel) {
-      var dList = list
-          .where(
-            (element) => element is Directory,
-          )
-          .toList()
-          .cast<Directory>();
-      for (var d in dList) {
-        var list = d
-            .listSync()
-            .where((element) => element is File)
-            .toList()
-            .cast<File>();
-        // print(list);
-        fileList.addAll(list);
-      }
-    }
-    var count = 0;
-    for (var file in fileList) {
-      count += file.readAsBytesSync().length;
-    }
-    return CacheInfo(
-      cacheCount: fileList.length,
-      cacheLength: count,
-    );
-  }
-
-  Directory get directory {
-    var d = Directory.fromUri(directoryPath);
-    if (!d.existsSync()) {
-      d.createSync(recursive: true);
-    }
-    return d;
-  }
-
-  List<LocalCacheObject> get all {
-    List<FileSystemEntity> list = directory.listSync();
-    List<LocalCacheObject> targetList = [];
-    for (var file in list) {
-      if (file is File) {
-        targetList.add(
-          LocalCacheObject(file.path.split('/').last.split('.').first, channel),
-        );
-      }
-    }
-    return targetList;
-  }
-
-  LocalCacheObject getById(String id) {
-    return LocalCacheObject(id, channel);
-  }
-
-  LocalCacheObject saveById(String id, Map<String, dynamic> value) {
-    return LocalCacheObject(id, channel, value)..save();
-  }
-
-  LocalCacheObject saveByIdAsync(String id, Map<String, dynamic> value) {
-    return LocalCacheObject(id, channel, value)..saveAsync();
-  }
-
-  LocalCacheObject deleteById(String id) {
-    return LocalCacheObject(id, channel)..delete();
-  }
-
-  // 清除全部
-  void clearAll() {
-    directory.deleteSync(recursive: true);
-  }
-}
-
-class CacheInfo {
-  final int? cacheCount;
-  final int? cacheLength;
-
-  CacheInfo({this.cacheCount, this.cacheLength});
-
-  String get sizeDesc => calculateSize(cacheLength! / 1);
-
-  static String calculateSize(double limit) {
-    var size = '';
-    if (limit < 0.1 * 1024) {
-      size = limit.toStringAsFixed(2) + ' B';
-    } else if (limit < 0.1 * 1024 * 1024) {
-      size = (limit / 1024).toStringAsFixed(2) + ' KB';
-    } else if (limit < 0.1 * 1024 * 1024 * 1024) {
-      size = (limit / (1024 * 1024)).toStringAsFixed(2) + ' MB';
-    } else {
-      size = (limit / (1024 * 1024 * 1024)).toStringAsFixed(2) + ' GB';
-    }
-    var sizeStr = size + '';
-    var index = sizeStr.indexOf('.');
-    String dou = sizeStr.substring(index + 1, index + 1 + 2);
-    if (dou == '00') {
-      return sizeStr.substring(0, index) +
-          sizeStr.substring(index + 3, index + 3 + 2);
-    }
-    return size;
-  }
-
-  @override
-  String toString() {
-    return "Cache Count: $cacheCount / Cache Data: $sizeDesc";
-  }
-}
-
-class LocalCacheObject {
-  final String id;
-
-  String get realId => id.replaceAll(RegExp('[\\\\/:.]'), '_');
-
-  String channel;
-  LocalCacheObject(this.id,
-      [this.channel = r'_$DefaultChannel', Map<String, dynamic>? value])
-      : this._value = value;
-
-  Uri get path => LocalCacheSync().cachePath!.resolve('$channel/');
-  File get file => File.fromUri(path.resolve('$realId.json'));
-
-  bool get isCache => _value != null;
-
-  Map<String, dynamic>? _value;
-
-  Map<String, dynamic>? get value {
-    if (_value == null) {
-      LocalCacheSync().willLoadValue?.call(this);
-      _value = read();
-      LocalCacheSync().didLoadValue?.call(_value, this);
-    }
-    return _value;
-  }
-
-  clear() {
-    _value = null;
-  }
-
-  Map<String, dynamic>? read() {
-    if (!file.existsSync()) {
-      return null;
-    }
-    var content = file.readAsStringSync();
-    try {
-      return json.decode(content);
-    } catch (e) {
-      print('Error Decode:$content($e)');
-      return null;
-    }
-  }
-
-  File save() {
-    return file
-      ..createSync(recursive: true)
-      ..writeAsStringSync(
-        JsonEncoder.withIndent('   ').convert(_value ?? {}),
-      );
-  }
-
-  void delete() {
-    _value = null;
-    file.deleteSync();
-  }
-
-  Future<Map<String, dynamic>?> readAsync() async {
-    if (!file.existsSync()) {
-      return null;
-    }
-    var content = await file.readAsString();
-    try {
-      return json.decode(content);
-    } catch (e) {
-      print('Error Decode:$content($e)');
-      return null;
-    }
-  }
-
-  Future<File> saveAsync() async {
-    await file.create(recursive: true);
-    await file.writeAsString(
-      JsonEncoder.withIndent('   ').convert(_value ?? {}),
-    );
-    return file;
-  }
-
-  Future<void> deleteAsync() async {
-    _value = null;
-    await file.delete();
   }
 }

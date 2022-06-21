@@ -6,7 +6,13 @@ import 'package:local_cache_sync/local_cache_sync.dart';
 class CacheViewTablePage extends StatefulWidget {
   final String channel;
 
-  const CacheViewTablePage(this.channel, {Key? key}) : super(key: key);
+  final Widget? Function(LocalCacheLoader, LocalCacheObject)? builder;
+
+  const CacheViewTablePage(
+    this.channel, {
+    Key? key,
+    this.builder,
+  }) : super(key: key);
 
   @override
   _CacheViewTablePageState createState() => _CacheViewTablePageState();
@@ -14,11 +20,11 @@ class CacheViewTablePage extends StatefulWidget {
 
 class _CacheViewTablePageState extends State<CacheViewTablePage> {
   List<LocalCacheObject> list = [];
-
+  late LocalCacheLoader loader = LocalCacheLoader(widget.channel);
   @override
   void initState() {
     setState(() {
-      list = LocalCacheLoader(widget.channel).all;
+      list = loader.all;
     });
     super.initState();
   }
@@ -32,38 +38,61 @@ class _CacheViewTablePageState extends State<CacheViewTablePage> {
       ),
       body: ListView.builder(
         itemCount: list.length,
-        itemBuilder: (ctx, index) => _Row(
-          object: list[index],
-          onDelete: () {
-            list[index].delete();
-            setState(() {
-              list = LocalCacheLoader(widget.channel).all;
-            });
-          },
-        ),
+        itemBuilder: (ctx, index) {
+          if (widget.builder != null) {
+            var cell = widget.builder?.call(loader, list[index]);
+            if (cell is Widget) return cell;
+          }
+          return _Row(
+            object: list[index],
+            onDelete: () {
+              list[index].delete();
+              setState(() {
+                list = LocalCacheLoader(widget.channel).all;
+              });
+            },
+          );
+        },
       ),
     );
   }
 }
 
 class _Row extends StatelessWidget {
-  final LocalCacheObject? object;
+  final LocalCacheObject object;
 
   final Function? onDelete;
 
   const _Row({
     Key? key,
-    this.object,
+    required this.object,
     this.onDelete,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> kvChildren = [];
-    var value = object!.value;
-    if (value == null) {
+    late Map<String, dynamic> value;
+    if (object.type == CacheType.json) {
+      var json = object.value;
+      if (json == null) {
+        value = {
+          'Error': 'Json Encode Error',
+        };
+      } else {
+        value = json;
+      }
+    } else if (object.type == CacheType.plain) {
       value = {
-        'Error': 'Json Encode Error',
+        'TEXT': object.plainTextValue,
+      };
+    } else if (object.type == CacheType.raw) {
+      value = {
+        'Byte:': '${object.file.lengthSync()}',
+      };
+    } else {
+      value = {
+        'Error': object.path,
       };
     }
     List<String> l = value.keys.toList();
@@ -98,7 +127,7 @@ class _Row extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(bottom: 6),
                   child: Text(
-                    'ID:${object!.id}',
+                    'ID:${object.id}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black.withOpacity(0.36),
