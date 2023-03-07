@@ -64,16 +64,19 @@ class LocalCacheSync {
 }
 
 /// 封装了一个简单的读写方法，在不存在值时返回默认值
-class DefaultValueCache<T> {
+class DefaultValueCache<T> extends ValueNotifier<T> {
   final String key;
   final T defaultValue;
 
-  const DefaultValueCache(this.key, this.defaultValue);
+  DefaultValueCache(this.key, this.defaultValue) : super(defaultValue);
 
+  @override
   T get value => LocalCacheSync.userDefault[key] ?? defaultValue;
 
+  @override
   set value(T? value) {
     LocalCacheSync.userDefault[key] = value;
+    super.value = this.value;
   }
 }
 

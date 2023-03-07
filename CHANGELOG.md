@@ -1,3 +1,6 @@
+## [3.1.1] Update DefaultValueCache
+- DefaultValueCache now extends ValueNotifier.
+
 ## [3.1.0] Update
 
 - Support read as plain text or Uint8List.
